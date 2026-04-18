@@ -23,38 +23,55 @@ void printSortedValues(const vector<Item>& items) {
 // 1. 求中位數
 // ------------------------------
 double findMedian(vector<int> values) {
-    // TODO:
-    // 1. 將 values 由小到大排序
-    // 2. 取得資料筆數 n
-    // 3. 若 n 為奇數，回傳中間值
-    // 4. 若 n 為偶數，回傳中間兩個值的平均
+    // 1. 排序
+    sort(values.begin(), values.end());
 
-    return 0.0; // 請修改
+    // 2. 取得資料筆數
+    int n = values.size();
+
+    // 3. 若 n 為奇數
+    if (n % 2 == 1) {
+        return values[n / 2];
+    }
+    // 4. 若 n 為偶數
+    else {
+        return (values[n / 2 - 1] + values[n / 2]) / 2.0;
+    }
 }
 
 // ------------------------------
 // 2. 求加權中位數
-// 定義：排序後，找到最小的 x_k，使得
-// 左側權重總和 <= 0.5，且右側權重總和 <= 0.5
-// 常用實作方式：找第一個累積權重 >= 0.5 的元素
 // ------------------------------
 int findWeightedMedian(vector<Item> items) {
-    // TODO:
-    // 1. 將 items 依照 x 由小到大排序
-    //    可使用 sort 搭配 lambda
-    //
-    // 2. 呼叫 printSortedValues(items) 顯示排序結果
-    //
-    // 3. 設定 cumulativeWeight = 0.0
-    //
-    // 4. 逐一走訪排序後的 items：
-    //    - 累加目前權重 item.w
-    //    - 印出 x、w、cumulative
-    //    - 若 cumulativeWeight >= 0.5，回傳 item.x
-    //
-    // 5. 若最後仍未找到，回傳 -1
+    // 1. 依照 x 排序
+    sort(items.begin(), items.end(), [](Item a, Item b) {
+        return a.x < b.x;
+    });
 
-    return -1; // 請修改
+    // 2. 印出排序結果
+    printSortedValues(items);
+
+    // 3. 初始化累積權重
+    double cumulativeWeight = 0.0;
+
+    cout << "\nProcess:\n";
+
+    // 4. 逐一走訪
+    for (const auto& item : items) {
+        cumulativeWeight += item.w;
+
+        cout << "x = " << item.x
+             << ", w = " << fixed << setprecision(2) << item.w
+             << ", cumulative = " << cumulativeWeight << "\n";
+
+        // 若累積權重 >= 0.5
+        if (cumulativeWeight >= 0.5) {
+            return item.x;
+        }
+    }
+
+    // 5. 若沒找到
+    return -1;
 }
 
 int main() {
